@@ -1,3 +1,36 @@
 .green-air__projects__container .hidden {
   display: none;
 }
+
+.green-air__project__filter__icons .deselected {
+  opacity: 0.3;
+}
+
+.selected .green-air__projects__filter__button {
+  background: #CED99D;
+}
+
+.green-air__projects__listview .green-air__projects__list-item:hover .green-air__projects__list__image__hover {
+  display:block;
+  pointer-events: none;
+}
+
+@media all and (min-width: 1201px) {
+  .green-air__products__list .green-air__products__description__wrapper {
+    opacity: 0;
+  }
+
+  .green-air__products__list .green-air__products:hover .green-air__products__description__wrapper {
+    transition: opacity 0.3s linear;
+    opacity: 100;
+  }
+}
+
+.js__green-air__hover-carousel__slide {
+  transition: opacity 0.3s linear;
+}
+
+.js__green-air__hover-carousel__slide.inactive-slide {
+  opacity: 0;
+  min-width: unset;
+}
