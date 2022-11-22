@@ -1,4 +1,4 @@
-const version = 5;
+const version = 6;
 console.log(`Loaded Green Air JS – Version: ${version}`);
 //
 // Classes and Functions
@@ -322,6 +322,52 @@ class MenuBar {
   }
 }
 
+class Slider {
+  sliderElement = null;
+  slider = null;
+  children = null;
+
+  constructor(sliderElement) {
+    this.getNumberOfSlides = this.getNumberOfSlides.bind(this);
+    this.sliderElement = sliderElement;
+    // Duplicate slides 3 times.
+    this.children = [...this.sliderElement.children];
+    for (let i = 0; i < 2; i++) {
+      this.children.forEach((node, i) => {
+        const duplicate = node.cloneNode(true);
+        this.sliderElement.appendChild(duplicate);
+      });
+    }
+
+    this.slider = new KeenSlider(sliderElement, {
+      loop: true,
+      mode: "free-snap",
+      slides: {
+        perView: this.getNumberOfSlides,
+        spacing: 0
+      }
+    });
+  }
+
+  getNumberOfSlides() {
+    const windowWidth = this.getPageWidth();
+    if (this.children.length <= 0) return 0;
+    const firstChild = this.children[0].firstChild;
+    const rect = firstChild.getBoundingClientRect();
+    return Math.ceil((windowWidth * 1.0) / (rect.width * 1.0));
+  }
+
+  getPageWidth() {
+    return Math.max(
+      document.body.scrollWidth,
+      document.documentElement.scrollWidth,
+      document.body.offsetWidth,
+      document.documentElement.offsetWidth,
+      document.documentElement.clientWidth
+    );
+  }
+}
+
 //
 // On Load
 //
@@ -346,5 +392,12 @@ window.addEventListener("load", (event) => {
   const menuBar = document.querySelector('.menubar').parentElement;
   if (menuBar != null) {
     new MenuBar(menuBar);
+  }
+
+  const keenSliders = document.querySelectorAll('.green-air__slider');
+  if (keenSliders != null) {
+    [...keenSliders].forEach((slider, i) => {
+      new Slider(slider);
+    });
   }
 });
