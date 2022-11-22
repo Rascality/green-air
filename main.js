@@ -1,4 +1,4 @@
-const version = 4;
+const version = 5;
 console.log(`Loaded Green Air JS – Version: ${version}`);
 //
 // Classes and Functions
@@ -14,7 +14,6 @@ class ProjectsList {
   projects = [];
 
   constructor() {
-    console.log('ProjectsList – Constructor');
     this.gridView = this.gridView.bind(this);
     this.listView = this.listView.bind(this);
     this.filter = this.filter.bind(this);
@@ -28,34 +27,29 @@ class ProjectsList {
   }
 
   initialiseProjects() {
-    console.log('ProjectsList – initialiseProjects');
     this.projectsListView = document.querySelector('.green-air__projects__listview');
     this.projectsGridView = document.querySelector('.green-air__projects__gridview');
   }
 
   initialiseControls() {
-    console.log('ProjectsList – initialiseControls');
     // Toggle the view controls.
     this.projectsGridViewControl = document.querySelector('.green-air__filter__icon__block');
     this.projectsListViewControl = document.querySelector('.green-air__filter__icon__list');
 
     if (this.projectsGridViewControl != null) {
       this.projectsGridViewControl.addEventListener('click', () => {
-        console.log('Clicked – GridView');
         this.gridView();
       });
     }
 
     if (this.projectsListViewControl != null) {
       this.projectsListViewControl.addEventListener('click', () => {
-        console.log('Clicked – ListView');
         this.listView();
       });
     }
   }
 
   gridView() {
-    console.log('Showing Grid View');
     this.projectsListView.classList.add('hidden');
     this.projectsListViewControl.classList.add('deselected');
     this.projectsGridView.classList.remove('hidden');
@@ -64,7 +58,6 @@ class ProjectsList {
   }
 
   listView() {
-    console.log('Showing List View');
     this.projectsGridView.classList.add('hidden');
     this.projectsGridViewControl.classList.add('deselected');
     this.projectsListView.classList.remove('hidden');
@@ -88,8 +81,6 @@ class ProjectsList {
   }
 
   filter(projectType) {
-    console.log("Filter:", this.projects);
-    console.log("ProjectTypes:", projectType);
     this.projects.forEach((project, i) => {
       if (project.types.includes(projectType)) {
         project.grid.classList.remove('hidden');
@@ -122,7 +113,6 @@ class ProjectListFilter {
       this.filterContainer.insertBefore(this.allFilter, this.filterContainer.firstChild);
 
       this.projectFilters = this.filterContainer.children;
-      console.log(this.projectFilters);
       [...this.projectFilters].forEach((projectFilter, i) => {
         projectFilter.addEventListener('click', () => {
           this.filterProjects(projectFilter);
@@ -144,6 +134,12 @@ class ProjectListFilter {
 }
 
 class HoverCarousel {
+  // Parent: js__parent-hover
+  // Carousel: js__green-air__hover-carousel
+  // -- Has Parent: js__target-parent-hover
+  // Slide: js__green-air__hover-carousel__slide
+  // -- Inactive Slide: inactive-slide
+
   hoverTarget = null;
   element = null;
   slides = [];
@@ -162,12 +158,14 @@ class HoverCarousel {
     this.element = element;
     this.findTarget();
 
-    let allSlides = [...element.querySelectorAll('.js__green-air__hover-carousel__slide')];
+    let allSlides = [...element.children];
+    const previousSrc = [];
     for (let i = 0; i < allSlides.length; i += 1) {
       let slide = allSlides[i];
       let src = slide.getAttribute("src");
-      if (src != null && src.trim().length !== 0) {
+      if (src != null && src.trim().length !== 0 && !previousSrc.includes(src)) {
         this.slides.push(slide);
+        previousSrc.push(src);
       } else {
         slide.remove();
       }
@@ -189,7 +187,6 @@ class HoverCarousel {
   }
 
   startRotatingSlides() {
-    console.log("Start Rotating Slides?");
     clearInterval(this.rotationInterval);
     this.rotationInterval = setInterval(() => {
       this.changeSlide();
@@ -213,6 +210,8 @@ class HoverCarousel {
         slide.style.height = `${rect.height}px`;
         slide.style.minWidth = `${rect.width}px`;
         slide.style.minHeight = `${rect.height}px`;
+        slide.style.maxWidth = `${rect.width}px`;
+        slide.style.maxHeight = `${rect.height}px`;
       }
     });
   }
@@ -230,9 +229,10 @@ class HoverCarousel {
     if (prevIndex === this.currentSlideIndex) return;
 
     const currentSlide = this.slides[this.currentSlideIndex];
-    console.log(`Changing from slide ${prevIndex} to ${this.currentSlideIndex}`);
+    currentSlide.classList.add('active-slide');
     currentSlide.classList.remove('inactive-slide');
     prevSlide.classList.add('inactive-slide');
+    prevSlide.classList.remove('active-slide');
   }
 
   stopRotatingSlides() {
@@ -260,23 +260,91 @@ class HoverCarousel {
   }
 }
 
+class AboutUsNav {
+  constructor(aboutUsNav) {
+    this.aboutUsNav = aboutUsNav;
+    this.scrolledNav = this.scrolledNav.bind(this);
+    this.sticky = false;
+
+    this.aboutUsNav.classList.add('js-about-us-nav');
+    this.scrolledNav();
+    window.addEventListener('scroll', () => {
+      this.scrolledNav();
+    });
+  }
+
+  scrolledNav() {
+    const rect = this.aboutUsNav.getBoundingClientRect();
+    if (!this.sticky && rect.top == 0) {
+      this.sticky = true;
+      this.aboutUsNav.classList.add('js-visible');
+    } else if (this.sticky && rect.top != 0) {
+      this.sticky = false;
+      this.aboutUsNav.classList.remove('js-visible');
+    }
+  }
+}
+
+class MenuBar {
+  menuBar = null;
+  desktopMenuBtn = null;
+  mobileMenuBtn = null;
+  expandedMenu = null;
+
+  constructor(menuBar) {
+    this.menuBar = menuBar;
+    this.desktopMenuBtn = this.menuBar.querySelector('.desktop-menu-btn');
+    this.mobileMenuBtn = this.menuBar.querySelector('.mobile-menu-btn');
+    this.expandedMenu = this.menuBar.querySelector('.green-air__menu-expanded');
+    this.toggleMenu = this.toggleMenu.bind(this);
+
+    this.attachClickListener(this.desktopMenuBtn);
+    this.attachClickListener(this.mobileMenuBtn);
+  }
+
+  attachClickListener(menuBtn) {
+    if (menuBtn != null) {
+      menuBtn.addEventListener("click", () => {
+        this.toggleMenu();
+      });
+    }
+  }
+
+  toggleMenu() {
+    const expanded = this.expandedMenu.classList.contains('expanded');
+    if (expanded) {
+      this.expandedMenu.classList.remove('expanded');
+      document.body.classList.remove('disable-scroll');
+    } else {
+      this.expandedMenu.classList.add('expanded');
+      document.body.classList.add('disable-scroll');
+    }
+  }
+}
+
 //
 // On Load
 //
 window.addEventListener("load", (event) => {
-  console.log("Starting Script");
   const projectsContainer = document.querySelector('.green-air__projects__container');
   if (projectsContainer != null) {
-    console.log("Creating ProjectsList");
     const projectsList = new ProjectsList();
-    console.log(projectsList);
   }
 
-  console.log('Loading Hover Carousels');
   const hoverCarousels = document.querySelectorAll('.js__green-air__hover-carousel');
   if (hoverCarousels != null) {
     [...hoverCarousels].forEach((hoverCarousel, i) => {
       new HoverCarousel(hoverCarousel);
     });
+  }
+
+  const aboutUsNav = document.querySelector('.green-air__aboutus__nav');
+  if (aboutUsNav != null) {
+    new AboutUsNav(aboutUsNav);
+  }
+
+  const menuBar = document.querySelector('.menubar').parentElement;
+  if (menuBar != null) {
+    new MenuBar(menuBar);
   }
 });

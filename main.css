@@ -1,3 +1,13 @@
+.disable-scroll {
+  overflow: hidden;
+  padding-right: 15px;
+}
+
+.disable-scroll .menubar {
+  min-width: 100vw;
+  padding-right: 45px;
+}
+
 .green-air__projects__container .hidden {
   display: none;
 }
@@ -26,11 +36,54 @@
   }
 }
 
-.js__green-air__hover-carousel__slide {
+.js__green-air__hover-carousel < * {
   transition: opacity 0.3s linear;
 }
 
-.js__green-air__hover-carousel__slide.inactive-slide {
+.js__green-air__hover-carousel .inactive-slide {
   opacity: 0;
-  min-width: unset;
+}
+
+.js__green-air__hover-carousel .active-slide {
+  opacity: 1;
+}
+
+.js-about-us-nav {
+  opacity: 0;
+}
+
+.js-about-us-nav.js-visible {
+  opacity: 1;
+  transition: opacity 0.3s linear;
+}
+
+.navbar .green-air__menu-expanded {
+  top: -100vh;
+  transition: top 0.3s linear;
+}
+
+.navbar .green-air__menu-expanded.expanded {
+  top: 0;
+}
+
+.js-menu-btn {
+  cursor: pointer;
+  transition: opacity 0.3s 0.3s linear;
+}
+
+.green-air__menu__pages {
+  opacity: 0;
+}
+
+.expanded .green-air__menu__pages {
+  opacity: 1;
+  transition: opacity 0.3s 0.3s linear;
+}
+
+.disable-scroll .js-menu-btn .menu {
+  opacity: 0;
+}
+
+.disable-scroll .js-menu-btn .menu.close-icon {
+  opacity: 1;
 }
