@@ -368,6 +368,31 @@ class Slider {
   }
 }
 
+class SplashImage {
+  splashImage = null;
+  visible = false;
+
+
+  constructor(splashImage) {
+    this.hideSplash = this.hideSplash.bind(this);
+    this.splashImage = splashImage;
+    this.visible = true;
+    this.splashImage.classList.add('splash-visible');
+
+
+
+    window.addEventListener('wheel', () => this.hideSplash());
+    this.splashImage.addEventListener('click', () => this.hideSplash());
+  }
+
+  hideSplash() {
+    if (this.visible) {
+      this.splashImage.classList.add('splash-fade');
+      this.visible = false;
+    }
+  }
+}
+
 //
 // On Load
 //
@@ -399,5 +424,10 @@ window.addEventListener("load", (event) => {
     [...keenSliders].forEach((slider, i) => {
       new Slider(slider);
     });
+  }
+
+  const splashImage = document.querySelector('.green-air__splash-image');
+  if (splashImage != null) {
+    new SplashImage(splashImage);
   }
 });

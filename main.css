@@ -87,3 +87,21 @@
 .disable-scroll .js-menu-btn .menu.close-icon {
   opacity: 1;
 }
+
+.green-air__splash-image.splash-visible {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  max-width: 100%;
+}
+
+
+.green-air__splash-image.splash-visible.splash-fade {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s linear;
+}
