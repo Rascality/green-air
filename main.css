@@ -48,11 +48,11 @@
   opacity: 1;
 }
 
-.js-about-us-nav {
+.js-about-us-nav .green-air__aboutus__nav__grid {
   opacity: 0;
 }
 
-.js-about-us-nav.js-visible {
+.js-about-us-nav.js-visible .green-air__aboutus__nav__grid {
   opacity: 1;
   transition: opacity 0.3s linear;
 }
@@ -69,6 +69,10 @@
 .js-menu-btn {
   cursor: pointer;
   transition: opacity 0.3s 0.3s linear;
+}
+
+.navbar.js-remove-sticky {
+  position: relative;
 }
 
 .green-air__menu__pages {

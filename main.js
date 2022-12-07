@@ -8,9 +8,7 @@ class ProjectsList {
   projectsGridView = null;
   projectsGridViewControl = null;
   projectsListViewControl = null;
-
   projectListFilter = null;
-
   projects = [];
 
   constructor() {
@@ -267,6 +265,11 @@ class AboutUsNav {
     this.sticky = false;
 
     this.aboutUsNav.classList.add('js-about-us-nav');
+    let navbar = document.body.querySelector('.navbar');
+    if (navbar != null) {
+      navbar.classList.add('js-remove-sticky');
+    }
+
     this.scrolledNav();
     window.addEventListener('scroll', () => {
       this.scrolledNav();
@@ -372,14 +375,11 @@ class SplashImage {
   splashImage = null;
   visible = false;
 
-
   constructor(splashImage) {
     this.hideSplash = this.hideSplash.bind(this);
     this.splashImage = splashImage;
     this.visible = true;
     this.splashImage.classList.add('splash-visible');
-
-
 
     window.addEventListener('wheel', () => this.hideSplash());
     this.splashImage.addEventListener('click', () => this.hideSplash());
