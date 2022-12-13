@@ -377,11 +377,12 @@ class Slider {
     }
 
     this.slider = new KeenSlider(sliderElement, {
-      loop: true,
-      mode: "free-snap",
-      slides: {
-        perView: this.getNumberOfSlides,
-        spacing: 0
+        loop: true,
+        mode: "free-snap",
+        slides: {
+          perView: this.getNumberOfSlides,
+          spacing: 0
+        }
       },
       [
         (slider) => {
@@ -413,7 +414,7 @@ class Slider {
           slider.on("updated", nextTimeout);
         }
       ]
-    });
+    );
   }
 
   getNumberOfSlides() {
