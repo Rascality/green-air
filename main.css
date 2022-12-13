@@ -48,13 +48,13 @@
   opacity: 1;
 }
 
-.js-about-us-nav .green-air__aboutus__nav__grid {
-  opacity: 0;
+.js-about-us-nav {
+  transition: opacity 0.3s linear;
 }
 
-.js-about-us-nav.js-visible .green-air__aboutus__nav__grid {
-  opacity: 1;
-  transition: opacity 0.3s linear;
+.js-about-us-nav.js-visible.scrolled-away {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .navbar .green-air__menu-expanded {
@@ -108,9 +108,30 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 1s linear;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-  user-select: none;
+}
+
+.hover-underline {
+  width: 0;
+  transition: width 0.5s linear;
+  pointer-events: none;
+}
+
+.div-hover-underline:hover .hover-underline {
+  width: 100%;
+  transition: width 0.5s linear;
+  pointer-events: none;
+}
+
+.navbar:not(.js-remove-sticky) {
+  transition: height 1s linear;
+  height: 100px;
+}
+
+.navbar:not(.js-remove-sticky).scrolled-away {
+  height: 0;
+  overflow: hidden;
+}
+
+.green-air__aboutus__nav.js-about-us-nav.js-visible {
+  background: transparent;
 }

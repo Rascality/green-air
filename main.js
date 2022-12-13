@@ -185,10 +185,11 @@ class HoverCarousel {
   }
 
   startRotatingSlides() {
+    this.changeSlide();
     clearInterval(this.rotationInterval);
     this.rotationInterval = setInterval(() => {
       this.changeSlide();
-    }, 2500);
+    }, 1000);
   }
 
   setSlideSizes() {
@@ -259,10 +260,15 @@ class HoverCarousel {
 }
 
 class AboutUsNav {
+  lastScrollTop = null;
+
   constructor(aboutUsNav) {
     this.aboutUsNav = aboutUsNav;
+    this.nextSibling = aboutUsNav.nextElementSibling;
     this.scrolledNav = this.scrolledNav.bind(this);
     this.sticky = false;
+    this.lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    this.scrolledMenu = this.scrolledMenu.bind(this);
 
     this.aboutUsNav.classList.add('js-about-us-nav');
     let navbar = document.body.querySelector('.navbar');
@@ -273,18 +279,29 @@ class AboutUsNav {
     this.scrolledNav();
     window.addEventListener('scroll', () => {
       this.scrolledNav();
+      this.scrolledMenu();
     });
   }
 
   scrolledNav() {
-    const rect = this.aboutUsNav.getBoundingClientRect();
-    if (!this.sticky && rect.top == 0) {
+    const rect = this.nextSibling.getBoundingClientRect();
+    if (!this.sticky && rect.top <= 0) {
       this.sticky = true;
       this.aboutUsNav.classList.add('js-visible');
-    } else if (this.sticky && rect.top != 0) {
+    } else if (this.sticky && rect.top > 0) {
       this.sticky = false;
       this.aboutUsNav.classList.remove('js-visible');
     }
+  }
+
+  scrolledMenu() {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > this.lastScrollTop) {
+      this.aboutUsNav.classList.add('scrolled-away');
+    } else {
+      this.aboutUsNav.classList.remove('scrolled-away');
+    }
+    this.lastScrollTop = scrollTop;
   }
 }
 
@@ -293,6 +310,7 @@ class MenuBar {
   desktopMenuBtn = null;
   mobileMenuBtn = null;
   expandedMenu = null;
+  lastScrollTop = null;
 
   constructor(menuBar) {
     this.menuBar = menuBar;
@@ -300,9 +318,15 @@ class MenuBar {
     this.mobileMenuBtn = this.menuBar.querySelector('.mobile-menu-btn');
     this.expandedMenu = this.menuBar.querySelector('.green-air__menu-expanded');
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.scrolledMenu = this.scrolledMenu.bind(this);
 
     this.attachClickListener(this.desktopMenuBtn);
     this.attachClickListener(this.mobileMenuBtn);
+    this.lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    window.addEventListener('scroll', () => {
+      this.scrolledMenu();
+    });
   }
 
   attachClickListener(menuBtn) {
@@ -322,6 +346,16 @@ class MenuBar {
       this.expandedMenu.classList.add('expanded');
       document.body.classList.add('disable-scroll');
     }
+  }
+
+  scrolledMenu() {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > this.lastScrollTop) {
+      this.menuBar.classList.add('scrolled-away');
+    } else {
+      this.menuBar.classList.remove('scrolled-away');
+    }
+    this.lastScrollTop = scrollTop;
   }
 }
 
