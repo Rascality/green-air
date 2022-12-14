@@ -1,4 +1,4 @@
-const version = 6;
+const version = 7;
 console.log(`Loaded Green Air JS – Version: ${version}`);
 //
 // Classes and Functions
@@ -357,6 +357,16 @@ class MenuBar {
     }
     this.lastScrollTop = scrollTop;
   }
+
+  setAltStyle() {
+    console.log('Setting Alt Style!');
+    this.menuBar.classList.add('js-alt-visible');
+  }
+
+  setDefaultStyle() {
+    console.log('Setting Default Style!');
+    this.menuBar.classList.remove('js-alt-visible');
+  }
 }
 
 class Slider {
@@ -458,6 +468,73 @@ class SplashImage {
   }
 }
 
+class StylerController {
+  stylers = null;
+  menu = null;
+  currentStyleAlt = false;
+  offset = 80; // navbar is ~ 100px tall.
+
+  constructor(menu) {
+    this.stylers = [];
+    this.menu = menu;
+    this.currentStyleAlt = false;
+    this.setMenuStyle = this.setMenuStyle.bind(this);
+    this.shouldBeAltStyle = this.shouldBeAltStyle.bind(this);
+    window.addEventListener('scroll', () => {
+      this.setMenuStyle();
+    });
+  }
+
+  addStyler(styler) {
+    this.stylers.push(styler);
+  }
+
+  setMenuStyle() {
+    const altFlag = this.shouldBeAltStyle();
+    console.log('Should be alt style?', altFlag);
+    if (altFlag === this.currentStyleAlt) return;
+
+    if (altFlag) {
+      this.menu.setAltStyle();
+    } else {
+      this.menu.setDefaultStyle();
+    }
+
+    this.currentStyleAlt = altFlag;
+  }
+
+  shouldBeAltStyle() {
+    let scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    let altStyle = false;
+    for (let i = 0; i < this.stylers.length; i++) {
+      const styler = this.stylers[i];
+      const rect = styler.element.getBoundingClientRect()
+      const top = rect.top + window.scrollY;
+      console.log(styler.alt, rect.bottom - this.offset);
+      if ((rect.bottom - this.offset) > 0) {
+        return altStyle;
+      } else {
+        altStyle = styler.alt;
+      }
+    }
+    return altStyle;
+  }
+}
+
+class MenuBarStyler {
+  element = null;
+  index = -1;
+  alt = false;
+
+  constructor(element, index, controller) {
+    this.element = element;
+    this.index = index;
+    this.alt = this.element.classList.contains('menubar-toggle-style-alt');
+
+    controller.addStyler(this);
+  }
+}
+
 //
 // On Load
 //
@@ -481,7 +558,16 @@ window.addEventListener("load", (event) => {
 
   const menuBar = document.querySelector('.menubar').parentElement;
   if (menuBar != null) {
-    new MenuBar(menuBar);
+    const menu = new MenuBar(menuBar);
+    let stylerController = new StylerController(menu);
+    let menubarStylers = document.querySelectorAll('.menubar-toggle-style, .menubar-toggle-style-alt');
+    console.log(menubarStylers);
+    if (menubarStylers != null) {
+      [...menubarStylers].forEach((menuBarStyler, index) => {
+        new MenuBarStyler(menuBarStyler, index, stylerController);
+      });
+    }
+    stylerController.shouldBeAltStyle();
   }
 
   const keenSliders = document.querySelectorAll('.green-air__slider');

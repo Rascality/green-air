@@ -135,3 +135,13 @@
 .green-air__aboutus__nav.js-about-us-nav.js-visible {
   background: transparent;
 }
+
+.js-alt-visible .desktop-menu-btn img:not(.close-icon),
+.js-alt-visible .green-air__logo_img_link img {
+  display: none;
+}
+
+.js-alt-visible .desktop-menu-btn img:not(.close-icon).js-alt,
+.js-alt-visible .green-air__logo_img_link img.js-alt {
+  display: inline-block;
+}
