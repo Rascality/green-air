@@ -49,11 +49,11 @@
 }
 
 .js-about-us-nav {
-  transition: opacity 0.3s linear;
+  transition: transform 0.4s linear;
 }
 
 .js-about-us-nav.js-visible.scrolled-away {
-  opacity: 0;
+  transform: translate3d(0, 100px, 0);
   pointer-events: none;
 }
 
@@ -123,12 +123,12 @@
 }
 
 .navbar:not(.js-remove-sticky) {
-  transition: opacity 0.3s linear;
+  transition: transform 0.4s linear;
   height: 100px;
 }
 
 .navbar:not(.js-remove-sticky).scrolled-away {
-  opacity: 0;
+  transform: translate3d(0, -150px, 0);
   pointer-events: none;
 }
 
