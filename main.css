@@ -72,7 +72,7 @@
 }
 
 .navbar.js-remove-sticky {
-  position: relative;
+  position: absolute;
 }
 
 .green-air__menu__pages {
