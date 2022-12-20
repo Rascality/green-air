@@ -255,7 +255,7 @@ class HoverCarousel {
     if (target === null) {
       console.log("Failed to find parent – Using element as target", target);
     }
-    this.target = target;
+    this.target = target;``
   }
 }
 
@@ -311,6 +311,8 @@ class MenuBar {
   mobileMenuBtn = null;
   expandedMenu = null;
   lastScrollTop = null;
+  currentStyleAlt = false;
+  expandedStyleAlt = false;
 
   constructor(menuBar) {
     this.menuBar = menuBar;
@@ -323,10 +325,15 @@ class MenuBar {
     this.attachClickListener(this.desktopMenuBtn);
     this.attachClickListener(this.mobileMenuBtn);
     this.lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    window.realClientHeightListeners.push(this);
 
     window.addEventListener('scroll', () => {
       this.scrolledMenu();
     });
+  }
+
+  notifyResizeEvent() {
+    this.expandedMenu.style.maxHeight = `${window.innerHeight}px`;
   }
 
   attachClickListener(menuBtn) {
@@ -342,30 +349,42 @@ class MenuBar {
     if (expanded) {
       this.expandedMenu.classList.remove('expanded');
       document.body.classList.remove('disable-scroll');
+      if (this.currentStyleAlt != this.expandedStyleAlt) {
+        if (this.expandedStyleAlt) {
+          this.setAltStyle();
+        } else {
+          this.setDefaultStyle();
+        }
+      }
     } else {
+      this.expandedStyleAlt = this.currentStyleAlt;
       this.expandedMenu.classList.add('expanded');
+      this.expandedMenu.style.maxHeight = `${window.innerHeight}px`;
       document.body.classList.add('disable-scroll');
+      this.setDefaultStyle();
     }
   }
 
   scrolledMenu() {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > this.lastScrollTop) {
+    if (scrollTop < 50) {
+      this.menuBar.classList.remove('scrolled-away');
+    } else if (scrollTop > this.lastScrollTop) {
       this.menuBar.classList.add('scrolled-away');
-    } else {
+    } else if (scrollTop < this.lastScrollTop) {
       this.menuBar.classList.remove('scrolled-away');
     }
     this.lastScrollTop = scrollTop;
   }
 
   setAltStyle() {
-    console.log('Setting Alt Style!');
     this.menuBar.classList.add('js-alt-visible');
+    this.currentStyleAlt = true;
   }
 
   setDefaultStyle() {
-    console.log('Setting Default Style!');
     this.menuBar.classList.remove('js-alt-visible');
+    this.currentStyleAlt = false;
   }
 }
 
@@ -457,6 +476,7 @@ class SplashImage {
     this.splashImage.classList.add('splash-visible');
 
     window.addEventListener('wheel', () => this.hideSplash());
+    window.addEventListener('scroll', () => this.hideSplash());
     this.splashImage.addEventListener('click', () => this.hideSplash());
   }
 
@@ -483,6 +503,9 @@ class StylerController {
     window.addEventListener('scroll', () => {
       this.setMenuStyle();
     });
+    setTimeout(() => {
+      this.setMenuStyle();
+    }, 10);
   }
 
   addStyler(styler) {
@@ -491,7 +514,6 @@ class StylerController {
 
   setMenuStyle() {
     const altFlag = this.shouldBeAltStyle();
-    console.log('Should be alt style?', altFlag);
     if (altFlag === this.currentStyleAlt) return;
 
     if (altFlag) {
@@ -510,7 +532,6 @@ class StylerController {
       const styler = this.stylers[i];
       const rect = styler.element.getBoundingClientRect()
       const top = rect.top + window.scrollY;
-      console.log(styler.alt, rect.bottom - this.offset);
       if ((rect.bottom - this.offset) > 0) {
         return altStyle;
       } else {
@@ -539,6 +560,16 @@ class MenuBarStyler {
 // On Load
 //
 window.addEventListener("load", (event) => {
+  window.realClientHeightListeners = [];
+  window.realClientHeight = document.querySelector('#control-height').clientHeight;
+  window.addEventListener('resize', () => {
+    window.realClientHeight = document.querySelector('#control-height').clientHeight;
+    for (let i = 0; i += 1; i++) {
+      let listener = window.realClientHeightListeners[i];
+      listener.notifyResizeEvent();
+    }
+  });
+
   const projectsContainer = document.querySelector('.green-air__projects__container');
   if (projectsContainer != null) {
     const projectsList = new ProjectsList();
@@ -561,7 +592,6 @@ window.addEventListener("load", (event) => {
     const menu = new MenuBar(menuBar);
     let stylerController = new StylerController(menu);
     let menubarStylers = document.querySelectorAll('.menubar-toggle-style, .menubar-toggle-style-alt');
-    console.log(menubarStylers);
     if (menubarStylers != null) {
       [...menubarStylers].forEach((menuBarStyler, index) => {
         new MenuBarStyler(menuBarStyler, index, stylerController);

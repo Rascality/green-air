@@ -1,11 +1,11 @@
 .disable-scroll {
   overflow: hidden;
-  padding-right: 15px;
+  padding-right: 0;
 }
 
 .disable-scroll .menubar {
   min-width: 100vw;
-  padding-right: 45px;
+  padding-right: 30px;
 }
 
 .green-air__projects__container .hidden {
@@ -123,13 +123,13 @@
 }
 
 .navbar:not(.js-remove-sticky) {
-  transition: height 1s linear;
+  transition: opacity 0.3s linear;
   height: 100px;
 }
 
 .navbar:not(.js-remove-sticky).scrolled-away {
-  height: 0;
-  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .green-air__aboutus__nav.js-about-us-nav.js-visible {
