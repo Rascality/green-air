@@ -509,8 +509,9 @@ class StylerController {
     window.addEventListener('scroll', () => {
       this.setMenuStyle();
     });
+
+    this.menu.setVisible();
     setTimeout(() => {
-      this.menu.setVisible();
       this.setMenuStyle();
     }, 10);
   }
