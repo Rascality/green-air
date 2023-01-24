@@ -1,8 +1,15 @@
-const version = 7;
+const version = 8;
+const logging = true;
 console.log(`Loaded Green Air JS – Version: ${version}`);
 //
 // Classes and Functions
 //
+
+function Log(...args) {
+  if (!logging) return;
+  console.log(...args);
+}
+
 class ProjectsList {
   projectsListView = null;
   projectsGridView = null;
@@ -384,11 +391,13 @@ class MenuBar {
   }
 
   setAltStyle() {
+    Log('Setting Alt Style!');
     this.menuBar.classList.add('js-alt-visible');
     this.currentStyleAlt = true;
   }
 
   setDefaultStyle() {
+    Log('Setting Default Style!');
     this.menuBar.classList.remove('js-alt-visible');
     this.currentStyleAlt = false;
   }
@@ -512,6 +521,7 @@ class StylerController {
 
     this.menu.setVisible();
     setTimeout(() => {
+      Log('timeout fired, settingMenuStyle');
       this.setMenuStyle();
     }, 10);
   }
@@ -521,6 +531,7 @@ class StylerController {
   }
 
   setMenuStyle() {
+    Log('SetMenuStyle');
     const altFlag = this.shouldBeAltStyle();
     if (altFlag === this.currentStyleAlt) return;
 
@@ -536,11 +547,14 @@ class StylerController {
   shouldBeAltStyle() {
     let scrollY = window.pageYOffset || document.documentElement.scrollTop;
     let altStyle = false;
+    Log('ScrollY', scrollY, altStyle);
     for (let i = 0; i < this.stylers.length; i++) {
       const styler = this.stylers[i];
       const rect = styler.element.getBoundingClientRect()
       const top = rect.top + window.scrollY;
+      Log('ScrollY', this.offset, rect);
       if ((rect.bottom - this.offset) > 0) {
+        Log('ScrollY - Is Above Styler', scrollY, altStyle);
         return altStyle;
       } else {
         altStyle = styler.alt;
