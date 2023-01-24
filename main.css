@@ -145,3 +145,15 @@
 .js-alt-visible .green-air__logo_img_link img.js-alt {
   display: inline-block;
 }
+
+.menubar {
+  pointer-events: none;
+}
+
+.menubar .green-air__logo_img_link {
+  pointer-events: all;
+}
+
+.menubar .desktop-menu-btn {
+  pointer-events: all;
+}
