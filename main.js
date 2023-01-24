@@ -169,19 +169,19 @@ class HoverCarousel {
       }
     }
     this.mainSlide = this.slides[0];
-
-    this.setSlideSizes();
-    window.addEventListener('resize', () => {
+    if (this.mainSlide != null) {
       this.setSlideSizes();
-    });
+      window.addEventListener('resize', () => {
+        this.setSlideSizes();
+      });
 
-
-    this.target.addEventListener('mouseenter', () => {
-      this.startRotatingSlides();
-    });
-    this.target.addEventListener('mouseleave', () => {
-      this.stopRotatingSlides();
-    });
+      this.target.addEventListener('mouseenter', () => {
+        this.startRotatingSlides();
+      });
+      this.target.addEventListener('mouseleave', () => {
+        this.stopRotatingSlides();
+      });
+    }
   }
 
   startRotatingSlides() {
@@ -193,6 +193,7 @@ class HoverCarousel {
   }
 
   setSlideSizes() {
+    if (!this.mainSlide) return false;
     if (this.mainSlide.complete && this.mainSlide.naturalHeight !== 0) {
       this.updateSlideSizes();
       return true;
@@ -271,10 +272,10 @@ class AboutUsNav {
     this.scrolledMenu = this.scrolledMenu.bind(this);
 
     this.aboutUsNav.classList.add('js-about-us-nav');
-    let navbar = document.body.querySelector('.navbar');
-    if (navbar != null) {
-      navbar.classList.add('js-remove-sticky');
-    }
+    // let navbar = document.body.querySelector('.navbar');
+    // if (navbar != null) {
+    //   navbar.classList.add('js-remove-sticky');
+    // }
 
     this.scrolledNav();
     window.addEventListener('scroll', () => {
