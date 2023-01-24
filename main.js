@@ -510,8 +510,8 @@ class StylerController {
       this.setMenuStyle();
     });
     setTimeout(() => {
-      this.setMenuStyle();
       this.menu.setVisible();
+      this.setMenuStyle();
     }, 10);
   }
 
