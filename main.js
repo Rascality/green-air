@@ -1,5 +1,5 @@
 const version = 8;
-const logging = true;
+const logging = false;
 console.log(`Loaded Green Air JS – Version: ${version}`);
 //
 // Classes and Functions
