@@ -328,9 +328,14 @@ class MenuBar {
     this.lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
     window.realClientHeightListeners.push(this);
 
+
     window.addEventListener('scroll', () => {
       this.scrolledMenu();
     });
+  }
+
+  setVisible() {
+    this.menuBar.classList.add('js-navbar-visible');
   }
 
   notifyResizeEvent() {
@@ -506,6 +511,7 @@ class StylerController {
     });
     setTimeout(() => {
       this.setMenuStyle();
+      this.menu.setVisible();
     }, 10);
   }
 

@@ -148,6 +148,12 @@
 
 .navbar {
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s linear;
+}
+
+.navbar.js-navbar-visible {
+  opacity: 1;
 }
 
 .menubar .green-air__logo_img_link {
