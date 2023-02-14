@@ -483,6 +483,8 @@ class Slider {
 class SplashImage {
   splashImage = null;
   visible = false;
+  scrollY = null;
+  ingoreEvent = true;
 
   constructor(splashImage) {
     this.hideSplash = this.hideSplash.bind(this);
@@ -491,7 +493,13 @@ class SplashImage {
     this.splashImage.classList.add('splash-visible');
 
     window.addEventListener('wheel', () => this.hideSplash());
-    window.addEventListener('scroll', () => this.hideSplash());
+    window.addEventListener('scroll', (event) => {
+      if (ingoreEvent) {
+        ingoreEvent = false;
+        return;
+      }
+      this.hideSplash();
+    });
     this.splashImage.addEventListener('click', () => this.hideSplash());
   }
 
