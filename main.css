@@ -107,7 +107,12 @@
 .green-air__splash-image.splash-visible.splash-fade {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1s linear;
+  transition: opacity 0.2s 1s linear;
+}
+
+.splash-fade .green-air__splash_text {
+  opacity: 0;
+  transition: opacity 0.2s linear;
 }
 
 .hover-underline {
