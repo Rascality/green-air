@@ -601,7 +601,7 @@ window.addEventListener("load", (event) => {
   window.realClientHeight = document.querySelector('#control-height').clientHeight;
   window.addEventListener('resize', () => {
     window.realClientHeight = document.querySelector('#control-height').clientHeight;
-    for (let i = 0; i += 1; i++) {
+    for (let i = 0; i < window.realClientHeightListeners.length; i++) {
       let listener = window.realClientHeightListeners[i];
       listener.notifyResizeEvent();
     }
