@@ -413,6 +413,12 @@ class Slider {
     this.sliderElement = sliderElement;
     // Duplicate slides 3 times.
     this.children = [...this.sliderElement.children];
+    if (this.children.length >= 4) {
+      initSlider();
+    }
+  }
+
+  initSlider() {
     for (let i = 0; i < 2; i++) {
       this.children.forEach((node, i) => {
         const duplicate = node.cloneNode(true);
@@ -420,7 +426,7 @@ class Slider {
       });
     }
 
-    this.slider = new KeenSlider(sliderElement, {
+    this.slider = new KeenSlider(this.sliderElement, {
         loop: true,
         mode: "free-snap",
         slides: {
