@@ -413,11 +413,10 @@ class Slider {
     this.sliderElement = sliderElement;
     // Duplicate slides 3 times.
     this.children = [...this.sliderElement.children];
-    initSlider();
+    this.initSlider();
   }
 
   initSlider() {
-
     if (this.children.length >= 4) {
       for (let i = 0; i < 2; i++) {
         this.children.forEach((node, i) => {
