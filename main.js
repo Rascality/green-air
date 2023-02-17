@@ -425,7 +425,7 @@ class Slider {
         });
       }
     }
-
+    const _this = this;
     this.slider = new KeenSlider(this.sliderElement, {
         loop: true,
         mode: "free-snap",
@@ -445,7 +445,7 @@ class Slider {
             clearTimeout(timeout);
             if (mouseOver) return;
             timeout = setTimeout(() => {
-              if (this.children.length >= 4 || this.getNumberOfSlides() <= this.children.length) {
+              if (_this.children.length >= 4 || _this.getNumberOfSlides() <= _this.children.length) {
                 slider.next();
               }
             }, 2000);
