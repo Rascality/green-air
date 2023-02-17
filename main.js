@@ -413,17 +413,18 @@ class Slider {
     this.sliderElement = sliderElement;
     // Duplicate slides 3 times.
     this.children = [...this.sliderElement.children];
-    if (this.children.length >= 4) {
-      initSlider();
-    }
+    initSlider();
   }
 
   initSlider() {
-    for (let i = 0; i < 2; i++) {
-      this.children.forEach((node, i) => {
-        const duplicate = node.cloneNode(true);
-        this.sliderElement.appendChild(duplicate);
-      });
+
+    if (this.children.length >= 4) {
+      for (let i = 0; i < 2; i++) {
+        this.children.forEach((node, i) => {
+          const duplicate = node.cloneNode(true);
+          this.sliderElement.appendChild(duplicate);
+        });
+      }
     }
 
     this.slider = new KeenSlider(this.sliderElement, {
