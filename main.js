@@ -407,9 +407,13 @@ class Slider {
   sliderElement = null;
   slider = null;
   children = null;
+  duplicates = [];
+  previouslyDisabled = true;
 
   constructor(sliderElement) {
     this.getNumberOfSlides = this.getNumberOfSlides.bind(this);
+    this.shouldSlide = this.shouldSlide.bind(this);
+    this.addOrRemoveDuplicates = this.addOrRemoveDuplicates.bind(this);
     this.sliderElement = sliderElement;
     // Duplicate slides 3 times.
     this.children = [...this.sliderElement.children];
@@ -417,18 +421,19 @@ class Slider {
   }
 
   initSlider() {
-    if (this.children.length >= 4) {
-      for (let i = 0; i < 2; i++) {
-        this.children.forEach((node, i) => {
-          const duplicate = node.cloneNode(true);
-          this.sliderElement.appendChild(duplicate);
-        });
-      }
-    }
     const _this = this;
+    for (let i = 0; i < 2; i++) {
+      this.children.forEach((node, i) => {
+        const duplicate = node.cloneNode(true);
+        this.duplicates.push(duplicate);
+      });
+    }
+    const startDisabled = !_this.shouldSlide();
+    this.addOrRemoveDuplicates(startDisabled);
     this.slider = new KeenSlider(this.sliderElement, {
         loop: true,
         mode: "free-snap",
+        disabled: startDisabled,
         slides: {
           perView: this.getNumberOfSlides,
           spacing: 0
@@ -445,7 +450,7 @@ class Slider {
             clearTimeout(timeout);
             if (mouseOver) return;
             timeout = setTimeout(() => {
-              if (_this.children.length >= 4 || _this.getNumberOfSlides() <= _this.children.length) {
+              if (_this.shouldSlide()) {
                 slider.next();
               }
             }, 2000);
@@ -467,6 +472,38 @@ class Slider {
         }
       ]
     );
+
+    window.addEventListener('resize', () => {
+      const disabled = !_this.shouldSlide();
+      _this.addOrRemoveDuplicates(disabled);
+      _this.slider.update({
+          loop: true,
+          mode: "free-snap",
+          disabled: disabled,
+          slides: {
+            perView: _this.getNumberOfSlides,
+            spacing: 0
+          }
+      });
+    });
+  }
+
+  shouldSlide() {
+    let slideable = this.children.length >= 4 || this.getNumberOfSlides() <= this.children.length;
+    return slideable;
+  }
+
+  addOrRemoveDuplicates(disabled) {
+    if (disabled === this.previouslyDisabled) return;
+    for (let i = 0; i < this.duplicates.length; i++) {
+      let duplicate = this.duplicates[i];
+      if (disabled) {
+        duplicate.remove();
+      } else {
+        this.sliderElement.appendChild(duplicate);
+      }
+    }
+    this.previouslyDisabled = disabled;
   }
 
   getNumberOfSlides() {
@@ -475,7 +512,6 @@ class Slider {
     const firstChild = this.children[0].firstChild;
     const rect = firstChild.getBoundingClientRect();
     const slideCount = Math.min(4, Math.ceil((windowWidth * 1.0) / (rect.width * 1.0)));
-    console.log('Calculating number of slides', slideCount)
     return slideCount;
   }
 

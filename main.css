@@ -172,3 +172,8 @@
 .green-air__menu-expanded.expanded {
   pointer-events: all;
 }
+
+.disabled-keen-slider {
+  flex-direction: column;
+  align-items: flex-start;
+}
