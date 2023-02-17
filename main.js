@@ -1,4 +1,4 @@
-const version = 8;
+const version = 9;
 const logging = false;
 console.log(`Loaded Green Air JS – Version: ${version}`);
 //
@@ -443,9 +443,11 @@ class Slider {
           }
           function nextTimeout() {
             clearTimeout(timeout);
-            if (mouseOver) return
+            if (mouseOver) return;
             timeout = setTimeout(() => {
-              slider.next();
+              if (this.children.length >= 4 || this.getNumberOfSlides() <= this.children.length) {
+                slider.next();
+              }
             }, 2000);
           }
           slider.on("created", () => {
@@ -472,7 +474,9 @@ class Slider {
     if (this.children.length <= 0) return 0;
     const firstChild = this.children[0].firstChild;
     const rect = firstChild.getBoundingClientRect();
-    return Math.ceil((windowWidth * 1.0) / (rect.width * 1.0));
+    const slideCount = Math.min(4, Math.ceil((windowWidth * 1.0) / (rect.width * 1.0)));
+    console.log('Calculating number of slides', slideCount)
+    return slideCount;
   }
 
   getPageWidth() {
