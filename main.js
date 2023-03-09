@@ -152,6 +152,7 @@ class HoverCarousel {
   rotationInterval = null;
   mainSlide = null;
   loadedImage = false;
+  resizeSlides = true;
 
   constructor(element) {
     this.startRotatingSlides = this.startRotatingSlides.bind(this);
@@ -162,6 +163,7 @@ class HoverCarousel {
 
     this.element = element;
     this.findTarget();
+    this.resizeSlides = !this.element.classList.includes('.js-no-resize');
 
     let allSlides = [...element.children];
     const previousSrc = [];
@@ -209,6 +211,7 @@ class HoverCarousel {
   }
 
   updateSlideSizes() {
+    if (!this.resizeSlides) return;
     this.loaded = true;
     let rect = this.mainSlide.getBoundingClientRect();
     this.slides.forEach((slide, i) => {
