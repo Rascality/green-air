@@ -163,7 +163,7 @@ class HoverCarousel {
 
     this.element = element;
     this.findTarget();
-    this.resizeSlides = !this.element.classList.includes('.js-no-resize');
+    this.resizeSlides = !this.element.classList.includes('js__no-resize');
 
     let allSlides = [...element.children];
     const previousSrc = [];
