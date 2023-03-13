@@ -542,6 +542,7 @@ class SplashImage {
     this.splashImage.classList.add('splash-visible');
 
     window.addEventListener('wheel', () => this.hideSplash());
+    window.addEventListener('touchend', () => this.hideSplash());
     window.addEventListener('scroll', (event) => {
       if (ingoreEvent) {
         ingoreEvent = false;
