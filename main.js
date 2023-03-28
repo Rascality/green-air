@@ -428,6 +428,7 @@ class Slider {
     for (let i = 0; i < 2; i++) {
       this.children.forEach((node, i) => {
         const duplicate = node.cloneNode(true);
+        duplicate.classList.add('hidden-mobile')
         this.duplicates.push(duplicate);
       });
     }
