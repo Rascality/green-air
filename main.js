@@ -342,6 +342,12 @@ class MenuBar {
     window.addEventListener('scroll', () => {
       this.scrolledMenu();
     });
+
+    document.querySelectorAll('video').forEach((video) => {
+      video.muted = true;
+      video.playsinline = true;
+      video.oncanplay = () => { video.play() };
+    });
   }
 
   setVisible() {
